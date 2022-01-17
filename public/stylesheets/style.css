@@ -23,6 +23,14 @@ a.button:hover {
   background: lightgray;
 }
 
+.attachment {
+  border-radius: 10px;
+  border: 2px solid #00f;
+  object-fit: cover;
+  width: 100px;
+  height: 100px;
+}
+
 .wideRow {
   display: flex;
   flex-flow: row wrap;

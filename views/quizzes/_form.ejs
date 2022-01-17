@@ -10,7 +10,16 @@
     <input type="text" class="itemWide" id="resp" name="answer" value="<%= quiz.answer %>" placeholder="Answer" autocomplete="off"/>
 </div>
 
-<br/>
-<a href="/quizzes" class="button">Cancel</a>
+<div>
+
+<label for="img">Attach file (Max size 2MB):</label>
+<input type="file" id="img" name="image"/>
+
+</div>
+
 
 <input type="submit" value="Save">
+
+<br />
+
+<a href="/quizzes" class="button">Cancel</a>

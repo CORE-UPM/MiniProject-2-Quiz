@@ -1,5 +1,5 @@
 {
-  "name": "quiz-2022",
+  "name": "miniquiz",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -20,6 +20,7 @@
     "http-errors": "~1.6.3",
     "method-override": "^3.0.0",
     "morgan": "~1.9.1",
+    "multer": "^1.4.4",
     "sequelize": "^6.13.0",
     "sqlite3": "^5.0.2"
   },

@@ -14,6 +14,9 @@
         <% var quiz = quizzes[i]; %>
         <tr>
             <td>
+                <% include ../attachments/_attachment %>
+            </td>
+            <td>
                 <a href="/quizzes/<%= quiz.id %>/play"><%= quiz.question %></a>
             </td>
             <td>
