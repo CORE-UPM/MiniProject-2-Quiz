@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MiniProject</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<h1>
+    Play:
+</h1>
+
+<form method="get" action="/quizzes/<%= quiz.id %>/check">
+    <p>
+        Question: <b><%= quiz.question %></b>
+    </p>
+
+
+    <div class="wideRow">
+        <input type="text" class="itemWide" name="answer" value="<%= answer %>" placeholder="Answer" autocomplete="off"/>
+        <input type="submit" class="itemNarrow" value="Check">
+    </div>
+</form>
+
+<a href="/quizzes" class="button">Go back</a>
+</body>
+</html>

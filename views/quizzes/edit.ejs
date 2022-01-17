@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MiniProject</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<h1>
+    Edit Quiz:
+</h1>
+
+<form method="post" action="/quizzes/<%= quiz.id %>?_method=PUT" >
+    <% include _form.ejs %>
+</form>
+</body>
+</html>

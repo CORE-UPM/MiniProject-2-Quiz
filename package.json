@@ -1,9 +1,16 @@
 {
-  "name": "quiz",
+  "name": "quiz-2022",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "super": "supervisor ./bin/www",
+    "migrate": "sequelize db:migrate --url sqlite://$(pwd)/quiz.sqlite",
+    "seed": "sequelize db:seed:all --url sqlite://$(pwd)/quiz.sqlite",
+    "migrate_win": "sequelize db:migrate --url sqlite://%cd%/quiz.sqlite",
+    "seed_win": "sequelize db:seed:all --url sqlite://%cd%/quiz.sqlite",
+    "migrate_env": "sequelize db:migrate --url $DATABASE_URL",
+    "seed_env": "sequelize db:seed:all --url $DATABASE_URL"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -11,6 +18,13 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "method-override": "^3.0.0",
+    "morgan": "~1.9.1",
+    "sequelize": "^6.13.0",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.4.1",
+    "supervisor": "^0.12.0"
   }
 }
