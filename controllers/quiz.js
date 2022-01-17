@@ -1,6 +1,21 @@
 const Sequelize = require("sequelize");
 const {models} = require("../models");
 
+// Autoload el quiz asociado a :quizId
+exports.load = async (req, res, next, quizId) => {
+
+    try {
+        const quiz = await models.Quiz.findByPk(quizId);
+        if (quiz) {
+            req.load = {...req.load, quiz};
+            next();
+        } else {
+            throw new Error('There is no quiz with id=' + quizId);
+        }
+    } catch (error) {
+        next(error);
+    }
+};
 
 // GET /quizzes
 exports.index = async (req, res, next) => {
@@ -15,20 +30,11 @@ exports.index = async (req, res, next) => {
 
 
 // GET /quizzes/:quizId
-exports.show = async (req, res, next) => {
+exports.show = (req, res, next) => {
 
-    try {
-        const quizId = Number(req.params.quizId);
+    const {quiz} = req.load;
 
-        const quiz = await models.Quiz.findByPk(quizId);
-        if (!quiz) {
-            throw new Error('There is no quiz with id=' + quizId);
-        }
-
-        res.render('quizzes/show', {quiz});
-    } catch (error) {
-        next(error);
-    }
+    res.render('quizzes/show', {quiz});
 };
 
 
@@ -71,38 +77,23 @@ exports.create = async (req, res, next) => {
 
 
 // GET /quizzes/:quizId/edit
-exports.edit = async (req, res, next) => {
+exports.edit = (req, res, next) => {
 
-    const quizId = Number(req.params.quizId);
+    const {quiz} = req.load;
 
-    try {
-        const quiz = await models.Quiz.findByPk(quizId);
-        if (quiz) {
-            res.render('quizzes/edit', {quiz});
-        } else {
-            throw new Error('There is no quiz with id=' + quizId);
-        }
-    } catch (error) {
-        next(error);
-    }
+    res.render('quizzes/edit', {quiz});
 };
 
 
 // PUT /quizzes/:quizId
 exports.update = async (req, res, next) => {
 
-    const quizId = Number(req.params.quizId);
+    const {quiz} = req.load;
 
-    let quiz;
+    quiz.question = req.body.question;
+    quiz.answer = req.body.answer;
+
     try {
-        quiz = await models.Quiz.findByPk(quizId);
-        if (!quiz) {
-            throw new Error('There is no quiz with id=' + quizId);
-        }
-
-        quiz.question = req.body.question;
-        quiz.answer = req.body.answer;
-
         await quiz.save({fields: ["question", "answer"]});
         res.redirect('/quizzes/' + quiz.id);
     } catch (error) {
@@ -120,15 +111,8 @@ exports.update = async (req, res, next) => {
 // DELETE /quizzes/:quizId
 exports.destroy = async (req, res, next) => {
 
-    const quizId = Number(req.params.quizId);
-
     try {
-        const quiz = await models.Quiz.findByPk(quizId);
-        if (!quiz) {
-            throw new Error('There is no quiz with id=' + quizId);
-        }
-
-        await quiz.destroy();
+        await req.load.quiz.destroy();
         res.redirect('/quizzes');
     } catch (error) {
         next(error);
@@ -139,46 +123,28 @@ exports.destroy = async (req, res, next) => {
 // GET /quizzes/:quizId/play
 exports.play = async (req, res, next) => {
 
-    const quizId = Number(req.params.quizId);
+    const {quiz} = req.load;
 
-    try {
-        const quiz = await models.Quiz.findByPk(quizId);
-        if (!quiz) {
-            throw new Error('There is no quiz with id=' + quizId);
-        }
+    const answer = req.query.answer || '';
 
-        const answer = req.query.answer || '';
-
-        res.render('quizzes/play', {
-            quiz,
-            answer
-        });
-    } catch (error) {
-        next(error);
-    }
+    res.render('quizzes/play', {
+        quiz,
+        answer
+    });
 };
 
 
 // GET /quizzes/:quizId/check
 exports.check = async (req, res, next) => {
 
-    const quizId = Number(req.params.quizId);
+    const {quiz} = req.load;
 
-    try {
-        const quiz = await models.Quiz.findByPk(quizId);
-        if (!quiz) {
-            throw new Error('There is no quiz with id=' + quizId);
-        }
+    const answer = req.query.answer || "";
+    const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
 
-        const answer = req.query.answer || "";
-        const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
-
-        res.render('quizzes/result', {
-            quiz,
-            result,
-            answer
-        });
-    } catch (error) {
-        next(error);
-    }
+    res.render('quizzes/result', {
+        quiz,
+        result,
+        answer
+    });
 };

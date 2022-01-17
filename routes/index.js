@@ -9,6 +9,9 @@ router.get('/', function(req, res, next) {
   res.redirect('/quizzes',);
 });
 
+// Autoload for routes using :quizId
+router.param('quizId', quizController.load);
+
 // Routes for the resource /quizzes
 router.get('/quizzes',                     quizController.index);
 router.get('/quizzes/:quizId(\\d+)',       quizController.show);
